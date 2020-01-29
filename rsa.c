@@ -2,7 +2,7 @@
 
 #define RUN 1
 
-int is_prime(int n)
+int is_prime(int n) // Verifica se o número é primo
 {
     int i;
     if (n == 1 || n == 0)
@@ -22,7 +22,7 @@ int is_prime(int n)
     }
 }
 
-int mdc(int n1, int n2)
+int mdc(int n1, int n2) // Calcula o MDC de dois números
 {
     int remainder;
     do
@@ -37,7 +37,7 @@ int mdc(int n1, int n2)
     return n1;
 }
 
-void suggprime(int n, int *primes)
+void suggprime(int n, int *primes) // Sugere 10 números coprimos
 {
     int i, count = 0;
 
@@ -77,15 +77,15 @@ void keygen() //Função para gerar chave pública
         }
     }
 
-    n = p * q; //Calcula n;
+    n = p * q; // Calcula n
 
-    fi = (p - 1) * (q - 1); //Calcula a função totiente (fi de Euler);
+    fi = (p - 1) * (q - 1); // Calcula a função totiente (fi de Euler)
 
-    suggprime(fi, fiprime);
+    suggprime(fi, fiprime); // Chama a função para sugerir coprimos
 
     printf("Agora, digite um expoente e que seja co-primo a fi. Sugestões:\n");
 
-    for (i = 0; i < 10; i++) //Imprime sugestões de expeonte e;
+    for (i = 0; i < 10; i++) //Imprime sugestões de expeonte e
     {
         printf("%d", fiprime[i]);
         if (i != 9)
@@ -98,10 +98,10 @@ void keygen() //Função para gerar chave pública
 
     scanf("%lld", &e);
 
-    FILE *pont_pub;
-    pont_pub = fopen("chave_publica.txt", "w");
-    fprintf(pont_pub, "%lld %lld", n, e);
-    fclose(pont_pub);
+    FILE *pont_pub; // Inicia o ponteiro do arquivo da chave pública
+    pont_pub = fopen("chave_publica.txt", "w"); // Abre ou cria o arquivo da chave publica
+    fprintf(pont_pub, "%lld %lld", n, e); // Grava no arquivo o par de chaves
+    fclose(pont_pub); // Fecha o arquivo
 
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
