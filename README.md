@@ -5,13 +5,13 @@ Membros do grupo:
 -Eduardo Araujo de Barros, Enderson, Kleber, Rebecca, Ullyanne Julia Freire Patriota.
 
 Professor: Lucas Amorim 
-Data de entrega/apresentação: A definir
+Data de entrega/apresentação: 10/02 a 17/02
 
 Informações gerais:
 • Projeto a ser realizado por equipes de até cinco pessoas. Todos os membros deverão participar ativamente da elaboração e apresentação do projeto.
 • Atenção: O aluno que ainda não pagou Programação 01 poderá contribuir com a parte teórica, explicações matemáticas, que serão fundamentais para elaboração e apresentação do projeto.
-• Data de definição das equipes: A definir (enviar e-mail para lucas@ic.ufal.br)
-• Data de entrega e apresentação do projeto para todas as equipes: A definir (ordem das equipes
+• Data de definição das equipes: 27/01/2020 (enviar e-mail para lucas@ic.ufal.br)
+• Data de entrega e apresentação do projeto para todas as equipes: 10/02 a 17/02 (ordem das equipes
 definida por sorteio)
 
 Requisitos do projeto sobre Criptografia RSA: Desenvolver um programa numa linguagem de programação à escolha da equipe que realize a seguinte tarefa:
@@ -30,7 +30,7 @@ Requisitos do projeto sobre Criptografia RSA: Desenvolver um programa numa lingu
 - Solicite que o usuário digite p, q e e.
 - Salve, no diretório de execução do programa, um arquivo txt com a mensagem desencriptada.
 
-Obs1.: A mensagem deve ser criptografada usando o alfabeto de letras A - Z, codificado com inteiros de 0 a 26, onde 0 = A, 1 = B, ..., 25 = Z, 26 = espaço (para facilitar).
+Obs1.: A mensagem deve ser criptografada usando o alfabeto de letras A - Z, codificado com inteiros de 2 a 28, onde 2 = A, 1 = B, ..., 27 = Z, 28 = espaço (para facilitar).
 Obs2.: Os programas apresentados serão testados da seguinte forma: Uma primeira equipe fornecerá uma chave pública para uma segunda equipe, que criará uma mensagem e a encriptará com a chave fornecida pela primeira equipe. Em seguida, a segunda equipe entregará a mensagem criptografada para a primeira equipe (via e-mail ou pendrive) que terá que realizar a desencriptação sem quaisquer problemas. Em seguida, o processo inverso será testado (a segunda equipe recebe a mensagem).
 
 Critérios de Avaliação:
