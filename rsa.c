@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
+#include <stdint.h>
 
 #define RUN 1
 
@@ -106,6 +108,32 @@ void keygen() //Função para gerar chave pública
 
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
+
+void cryptmessage(int *messagecon, int size, int *messagecrypt, long long int n, long long int e)
+{
+    int i;
+    long long int resto;
+    long long int C;
+
+    resto = e % (n-1);
+
+    for(i = 0; i < size-1; i++)
+    {   
+        printf("msgcon %d\n", messagecon[i]);
+        
+        resto = pow(16,23);
+        printf("resto %lld\n", resto);
+
+        C = (long long int) pow(messagecon[i], resto) % n;
+
+        printf("a %lld\n", C);
+
+        messagecrypt[i] = C;
+    }
+
+
+}
+
 
 void convert(char *message, int *messagec)
 {
@@ -230,6 +258,7 @@ void crypt()
     char message[99999];
     int messagecon[99999], messagecrypt[99999], size, i;
     long long int n, e;
+    
     printf("Digite a mensagem a ser criptografada:\n");
 
     getchar();
@@ -242,7 +271,14 @@ void crypt()
 
     printf("Por favor, digite a chave pública para criptografar:\n");
 
-    //scanf("%lld %lld", n, e);
+    scanf("%lld %lld", &n, &e);
+
+    cryptmessage(messagecon, size, messagecrypt, n, e);
+
+    for(i = 0; i < size; i++)
+    {
+        printf("teste %d\n", messagecrypt[i]);
+    }
 }
 
 int decrypt()
