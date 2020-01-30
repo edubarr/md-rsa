@@ -1,4 +1,4 @@
-# md-rsa
+# md-rsa mil tretas
 Repositório para o projeto final da disciplina de Matemática Discreta sobre criptografia RSA.
 
 Membros do grupo:
