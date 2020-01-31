@@ -2,7 +2,7 @@
 Repositório para o projeto final da disciplina de Matemática Discreta sobre criptografia RSA.
 
 Membros do grupo:
--Eduardo Araujo de Barros, Enderson, Kleber, Rebecca, Ullyanne Julia Freire Patriota.
+-Eduardo Araujo de Barros, Enderson, Kleber, Rebeca, Ullyanne Julia Freire Patriota.
 
 Professor: Lucas Amorim 
 Data de entrega/apresentação: 10/02 a 17/02
