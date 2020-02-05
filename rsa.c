@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
+#include <math.h>
 
 #define RUN 1
 
@@ -107,120 +109,134 @@ void keygen() //Função para gerar chave pública
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
 
-void convert(char *message, int *messagec)
+int fastexp(int m, int e, int n)
+{
+    if (e == 0)
+        return 1;
+    else
+    {
+        long long res = fastexp(m, e / 2, n);
+        res = (res * res) % n;
+        if (e % 2 == 1)
+            res = (res * m) % n;
+        return (int)res;
+    }
+}
+
+void convert(char *message, long long int *messagecon)
 {
     int size, i;
     size = strlen(message);
 
     for (i = 0; i < size; i++)
     {
-        if (message[i] == 'A')
+        if (toupper(message[i]) == 'A')
         {
-            messagec[i] = 2;
+            messagecon[i] = 2;
         }
-        else if (message[i] == 'B')
+        else if (toupper(message[i]) == 'B')
         {
-            messagec[i] = 3;
+            messagecon[i] = 3;
         }
-        else if (message[i] == 'C')
+        else if (toupper(message[i]) == 'C')
         {
-            messagec[i] = 4;
+            messagecon[i] = 4;
         }
-        else if (message[i] == 'D')
+        else if (toupper(message[i]) == 'D')
         {
-            messagec[i] = 5;
+            messagecon[i] = 5;
         }
-        else if (message[i] == 'E')
+        else if (toupper(message[i]) == 'E')
         {
-            messagec[i] = 6;
+            messagecon[i] = 6;
         }
-        else if (message[i] == 'F')
+        else if (toupper(message[i]) == 'F')
         {
-            messagec[i] = 7;
+            messagecon[i] = 7;
         }
-        else if (message[i] == 'G')
+        else if (toupper(message[i]) == 'G')
         {
-            messagec[i] = 8;
+            messagecon[i] = 8;
         }
-        else if (message[i] == 'H')
+        else if (toupper(message[i]) == 'H')
         {
-            messagec[i] = 9;
+            messagecon[i] = 9;
         }
-        else if (message[i] == 'I')
+        else if (toupper(message[i]) == 'I')
         {
-            messagec[i] = 10;
+            messagecon[i] = 10;
         }
-        else if (message[i] == 'J')
+        else if (toupper(message[i]) == 'J')
         {
-            messagec[i] = 11;
+            messagecon[i] = 11;
         }
-        else if (message[i] == 'K')
+        else if (toupper(message[i]) == 'K')
         {
-            messagec[i] = 12;
+            messagecon[i] = 12;
         }
-        else if (message[i] == 'L')
+        else if (toupper(message[i]) == 'L')
         {
-            messagec[i] = 13;
+            messagecon[i] = 13;
         }
-        else if (message[i] == 'M')
+        else if (toupper(message[i]) == 'M')
         {
-            messagec[i] = 14;
+            messagecon[i] = 14;
         }
-        else if (message[i] == 'N')
+        else if (toupper(message[i]) == 'N')
         {
-            messagec[i] = 15;
+            messagecon[i] = 15;
         }
-        else if (message[i] == 'O')
+        else if (toupper(message[i]) == 'O')
         {
-            messagec[i] = 16;
+            messagecon[i] = 16;
         }
-        else if (message[i] == 'P')
+        else if (toupper(message[i]) == 'P')
         {
-            messagec[i] = 17;
+            messagecon[i] = 17;
         }
-        else if (message[i] == 'Q')
+        else if (toupper(message[i]) == 'Q')
         {
-            messagec[i] = 18;
+            messagecon[i] = 18;
         }
-        else if (message[i] == 'R')
+        else if (toupper(message[i]) == 'R')
         {
-            messagec[i] = 19;
+            messagecon[i] = 19;
         }
-        else if (message[i] == 'S')
+        else if (toupper(message[i]) == 'S')
         {
-            messagec[i] = 20;
+            messagecon[i] = 20;
         }
-        else if (message[i] == 'T')
+        else if (toupper(message[i]) == 'T')
         {
-            messagec[i] = 21;
+            messagecon[i] = 21;
         }
-        else if (message[i] == 'U')
+        else if (toupper(message[i]) == 'U')
         {
-            messagec[i] = 22;
+            messagecon[i] = 22;
         }
-        else if (message[i] == 'V')
+        else if (toupper(message[i]) == 'V')
         {
-            messagec[i] = 23;
+            messagecon[i] = 23;
         }
-        else if (message[i] == 'W')
+        else if (toupper(message[i]) == 'W')
         {
-            messagec[i] = 24;
+            messagecon[i] = 24;
         }
-        else if (message[i] == 'X')
+        else if (toupper(message[i]) == 'X')
         {
-            messagec[i] = 25;
+            messagecon[i] = 25;
         }
-        else if (message[i] == 'Y')
+        else if (toupper(message[i]) == 'Y')
         {
-            messagec[i] = 26;
+            messagecon[i] = 26;
         }
-        else if (message[i] == 'Z')
+        else if (toupper(message[i]) == 'Z')
         {
-            messagec[i] = 27;
+            messagecon[i] = 27;
         }
-        else if (message[i] == ' ')
+        else if (toupper(message[i]) == ' ')
         {
-            messagec[i] = 28;
+            messagecon[i] = 28;
         }
     }
 }
@@ -228,8 +244,9 @@ void convert(char *message, int *messagec)
 void crypt()
 {
     char message[99999];
-    int messagecon[99999], messagecrypt[99999], size, i;
-    long long int n, e;
+    long long int messagecon[99999], messagecrypt[99999];
+    long long int n, e, size, i;
+
     printf("Digite a mensagem a ser criptografada:\n");
 
     getchar();
@@ -242,7 +259,20 @@ void crypt()
 
     printf("Por favor, digite a chave pública para criptografar:\n");
 
-    //scanf("%lld %lld", n, e);
+    scanf("%lld %lld", &n, &e);
+
+    for (i = 0; i < size - 1; i++)
+    {
+        messagecrypt[i] = fastexp(messagecon[i], e, n);
+    }
+
+    FILE *out = fopen("msgcriptografada.txt", "w");
+    for (i = 0; i < size - 1; i++)
+    {
+        fprintf(out, "%lld ", messagecrypt[i]);
+    }
+
+    fclose(out);
 }
 
 int decrypt()
