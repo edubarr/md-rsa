@@ -69,7 +69,7 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
     }
 }
 
-void keygen() //Função para gerar chave pública
+void keygen() // Função para gerar chave pública
 {
     long long int p = 1, q = 1, e, n, fi;
     int fiprime[10];
