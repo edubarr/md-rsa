@@ -392,7 +392,7 @@ int modularinverse(//A ALTERAR//)
 
     printf("%d = (%d) * %d + (%d) * %d\n", xt, s, menormod, t, maiormod);
 
-    if(menormod == x) //vai printar sempre o "s" convencional
+    if(menormod == x) //vai printar sempre o "s" convencional e colocá-lo como inverso
     {
         inverso = s;
         printf("%d\n", s);
