@@ -5,6 +5,20 @@
 
 #define RUN 1
 
+void clear() // Limpa a tela do terminal
+{
+    puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+}
+
+void buffclear(void) // Limpa o buffer de entrada
+{
+    int c = 0;
+    while ((c = getchar()) != '\n' && c != EOF)
+    {
+    }
+    return;
+}
+
 int is_prime(int n) // Verifica se o número é primo
 {
     int i;
@@ -109,7 +123,7 @@ void keygen() //Função para gerar chave pública
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
 
-int fastexp(int m, int e, int n)
+int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
 {
     if (e == 0)
         return 1;
@@ -123,7 +137,7 @@ int fastexp(int m, int e, int n)
     }
 }
 
-void convert(char *message, long long int *messagecon)
+void convert(char *message, long long int *messagecon) // Converta a string da mensagem em inteiros de acordo com dicionário proposto
 {
     int size, i;
     size = strlen(message);
@@ -241,7 +255,7 @@ void convert(char *message, long long int *messagecon)
     }
 }
 
-void crypt()
+void crypt() // Passa a string convertida pada ser criptografada
 {
     char message[99999];
     long long int messagecon[99999], messagecrypt[99999];
@@ -249,7 +263,7 @@ void crypt()
 
     printf("Digite a mensagem a ser criptografada:\n");
 
-    getchar();
+    buffclear();
 
     fgets(message, 99999, stdin);
 
@@ -271,8 +285,11 @@ void crypt()
     {
         fprintf(out, "%lld ", messagecrypt[i]);
     }
-
     fclose(out);
+
+    clear();
+
+    printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt\n\n");
 }
 
 int modularinverse(//A ALTERAR//)
@@ -284,12 +301,11 @@ int modularinverse(//A ALTERAR//)
     int A[100]; //array de quocientes
     int B[100]; //array de quo invertido
 
-
     scanf("%d%d", &x, &y);
     xt = x;
     yt = y;
-    
-    if( abs(x) >= abs(y) )
+
+    if (abs(x) >= abs(y))
     {
         maiormod = x;
         menormod = y;
@@ -299,100 +315,87 @@ int modularinverse(//A ALTERAR//)
         maiormod = y;
         menormod = x;
     }
-    
 
+    resto = xt % yt;
 
-    resto = xt%yt;
-
-    for(i = 0; resto!= 0; i++)
+    for (i = 0; resto != 0; i++)
     {
-        quo = xt/yt;
+        quo = xt / yt;
         A[i] = quo;
-        resto = xt%yt;
-        
+        resto = xt % yt;
+
         xt = yt; //x é mdc
         yt = resto;
     }
 
-
     //retirar o ultimo da lista
 
+    for (i = 0; i < 100; i++)
+    {
 
-    for(i = 0; i < 100; i++)
-    {     
-        
-        if(A[i] == -1)
-        {  
-            A[i-1] = -1;
-            
+        if (A[i] == -1)
+        {
+            A[i - 1] = -1;
+
             break;
-
         }
     }
-   
+
     //inverter
 
     j = 0;
 
-    for( i = 99; i >= 0; i--)
+    for (i = 99; i >= 0; i--)
     {
-        if(A[i] != -1)
-        {   
+        if (A[i] != -1)
+        {
             j++;
 
-            B[j-1] = A[i];
+            B[j - 1] = A[i];
         }
-        
     }
 
-
-
-//-------------
+    //-------------
 
     //elementos da nova lista
 
-    int C[j+1];
-   
+    int C[j + 1];
+
     C[0] = 1;
 
-    C[1] = B[0]; 
+    C[1] = B[0];
 
-
-    for(i = 2; i <= j; i++)
+    for (i = 2; i <= j; i++)
     {
-        C[i] = (B[i-1] * C[i-1]) + C[i-2];
+        C[i] = (B[i - 1] * C[i - 1]) + C[i - 2];
     }
 
-
-
-//---------
+    //---------
     //se j for ímpar, o último elemento será negativo
 
-    if(j%2 != 0) //caso em que j é ímpar
+    if (j % 2 != 0) //caso em que j é ímpar
     {
         C[j] *= -1;
-
     }
     else //se j for par, o penúltimo elemento será negativo
     {
-        C[j-1] *= -1;
-
+        C[j - 1] *= -1;
     }
 
-    if( abs(C[j]) >= abs(C[j-1]) )
+    if (abs(C[j]) >= abs(C[j - 1]))
     {
         s = C[j];
-        t = C[j-1];
+        t = C[j - 1];
     }
     else
     {
-        s = C[j-1];
+        s = C[j - 1];
         t = C[j];
     }
 
     printf("%d = (%d) * %d + (%d) * %d\n", xt, s, menormod, t, maiormod);
 
-    if(menormod == x) //vai printar sempre o "s" convencional e colocá-lo como inverso
+    if (menormod == x) //vai printar sempre o "s" convencional e colocá-lo como inverso
     {
         inverso = s;
         printf("%d\n", s);
@@ -402,15 +405,13 @@ int modularinverse(//A ALTERAR//)
         inverso = t;
         printf("%d\n", t);
     }
-    
+
     return inverso;
 
 }
 
-
-int decrypt()
+int decrypt() // Passa a mensagem criptografada para ser descriptografada
 {
-    //chama a função de inverso//
 }
 
 int main()
