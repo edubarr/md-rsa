@@ -275,8 +275,142 @@ void crypt()
     fclose(out);
 }
 
+int modularinverse(//A ALTERAR//)
+{
+    int x, y, i, j;
+    int xt, yt;
+    int resto, quo, maiormod, menormod, inverso;
+    int s, t;
+    int A[100] =; //array de quocientes
+    int B[100] =; //array de quo invertido
+
+
+    scanf("%d%d", &x, &y);
+    xt = x;
+    yt = y;
+    
+    if( abs(x) >= abs(y) )
+    {
+        maiormod = x;
+        menormod = y;
+    }
+    else
+    {
+        maiormod = y;
+        menormod = x;
+    }
+    
+
+
+    resto = xt%yt;
+
+    for(i = 0; resto!= 0; i++)
+    {
+        quo = xt/yt;
+        A[i] = quo;
+        resto = xt%yt;
+        
+        xt = yt; //x é mdc
+        yt = resto;
+    }
+
+
+    //retirar o ultimo da lista
+
+
+    for(i = 0; i < 100; i++)
+    {     
+        
+        if(A[i] == -1)
+        {  
+            A[i-1] = -1;
+            
+            break;
+
+        }
+    }
+   
+    //inverter
+
+    j = 0;
+
+    for( i = 99; i >= 0; i--)
+    {
+        if(A[i] != -1)
+        {   
+            j++;
+
+            B[j-1] = A[i];
+        }
+        
+    }
+
+
+
+//-------------
+
+    //elementos da nova lista
+
+    int C[j+1];
+   
+    C[0] = 1;
+
+    C[1] = B[0]; 
+
+
+    for(i = 2; i <= j; i++)
+    {
+        C[i] = (B[i-1] * C[i-1]) + C[i-2];
+    }
+
+
+
+//---------
+    //se j for ímpar, o último elemento será negativo
+
+    if(j%2 != 0) //caso em que j é ímpar
+    {
+        C[j] *= -1;
+
+    }
+    else //se j for par, o penúltimo elemento será negativo
+    {
+        C[j-1] *= -1;
+
+    }
+
+    if( abs(C[j]) >= abs(C[j-1]) )
+    {
+        s = C[j];
+        t = C[j-1];
+    }
+    else
+    {
+        s = C[j-1];
+        t = C[j];
+    }
+
+    printf("%d = (%d) * %d + (%d) * %d\n", xt, s, menormod, t, maiormod);
+
+    if(menormod == x) //vai printar sempre o "s" convencional
+    {
+        inverso = s;
+        printf("%d\n", s);
+    }
+    else
+    {
+        inverso = t;
+        printf("%d\n", t);
+    }
+    
+    return inverso;
+
+}
+
+
 int decrypt()
 {
+    //chama a função de inverso//
 }
 
 int main()
