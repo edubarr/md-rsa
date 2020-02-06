@@ -5,6 +5,20 @@
 
 #define RUN 1
 
+void clear() // Limpa a tela do terminal
+{
+    puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+}
+
+void buffclear(void) // Limpa o buffer de entrada
+{
+    int c = 0;
+    while ((c = getchar()) != '\n' && c != EOF)
+    {
+    }
+    return;
+}
+
 int is_prime(int n) // Verifica se o número é primo
 {
     int i;
@@ -109,7 +123,7 @@ void keygen() //Função para gerar chave pública
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
 
-int fastexp(int m, int e, int n)
+int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
 {
     if (e == 0)
         return 1;
@@ -123,7 +137,7 @@ int fastexp(int m, int e, int n)
     }
 }
 
-void convert(char *message, long long int *messagecon)
+void convert(char *message, long long int *messagecon) // Converta a string da mensagem em inteiros de acordo com dicionário proposto
 {
     int size, i;
     size = strlen(message);
@@ -241,7 +255,7 @@ void convert(char *message, long long int *messagecon)
     }
 }
 
-void crypt()
+void crypt() // Passa a string convertida pada ser criptografada
 {
     char message[99999];
     long long int messagecon[99999], messagecrypt[99999];
@@ -249,7 +263,7 @@ void crypt()
 
     printf("Digite a mensagem a ser criptografada:\n");
 
-    getchar();
+    buffclear();
 
     fgets(message, 99999, stdin);
 
@@ -271,11 +285,14 @@ void crypt()
     {
         fprintf(out, "%lld ", messagecrypt[i]);
     }
-
     fclose(out);
+
+    clear();
+
+    printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt\n\n");
 }
 
-int decrypt()
+int decrypt() // Passa a mensagem criptografada para ser descriptografada
 {
 }
 
