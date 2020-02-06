@@ -1,14 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
-
 #define RUN 1
 
-void clear() // Limpa a tela do terminal
-{
-    puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-}
+char DICIONARIO[30] = "..ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+
+
+
+// void clear() // Limpa a tela do terminal
+// {
+//     puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+// }
 
 void buffclear(void) // Limpa o buffer de entrada
 {
@@ -69,7 +73,229 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
     }
 }
 
-void keygen() //Função para gerar chave pública
+/*int modularinverse(long long int fi, long long int e)
+{
+    int i, j;
+    long long int fi2, e2;
+    long long int resto, quo, maiormod, menormod, inverso;
+    long long int s, t;
+    long long int quocientes[100]; //array de quocientes
+    long long int quoinvert[100]; //array de quo invertido
+
+   // printf("e %lld fi %lld\n", e, fi);
+   
+    for(i = 0; i < 100; i++)
+    {
+        quocientes[i] = -1;
+    }
+
+    e2 = e;
+    fi2 = fi;
+
+    if (abs(e) >= abs(fi))
+    {
+        maiormod = e;
+        menormod = fi;
+    }
+    else
+    {
+        maiormod = fi;
+        menormod = e;
+    }
+
+    resto = e2 % fi2;
+
+    for (i = 0; resto != 0; i++)
+    {
+        quo = e2 / fi2;
+        quocientes[i] = quo;
+        resto = e2 % fi2;
+
+        e2 = fi2; //x é mdc
+        fi2 = resto;
+    }
+
+    //retirar o ultimo da lista
+
+    for (i = 0; i < 100; i++)
+    {
+
+        if (quocientes[i] == -1)
+        {
+            quocientes[i - 1] = -1;
+
+            break;
+        }
+    }
+
+    //inverter
+
+    j = 0;
+
+    for (i = 99; i >= 0; i--)
+    {
+        if (quocientes[i] != -1)
+        {
+            j++;
+
+            quoinvert[j - 1] = quocientes[i];
+        }
+    }
+
+    //-------------
+
+    //elementos da nova lista
+
+    int C[j + 1];
+
+    C[0] = 1;
+
+    C[1] = quoinvert[0];
+
+    for (i = 2; i <= j; i++)
+    {
+        C[i] = (quoinvert[i - 1] * C[i - 1]) + C[i - 2];
+    }
+
+    //---------
+    //se j for ímpar, o último elemento será negativo
+
+    if (j % 2 != 0) //caso em que j é ímpar
+    {
+        C[j] *= -1;
+    }
+    else //se j for par, o penúltimo elemento será negativo
+    {
+        C[j - 1] *= -1;
+    }
+
+    if (abs(C[j]) >= abs(C[j - 1]))
+    {
+        s = C[j];
+        t = C[j - 1];
+    }
+    else
+    {
+        s = C[j - 1];
+        t = C[j];
+    }
+
+    // printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, menormod, t, maiormod);
+
+    if (menormod == e) //vai printar sempre o "s" convencional e colocá-lo como inverso
+    {
+        while(s < 0)
+        {
+            s += fi;
+        }
+
+        inverso = s;
+        printf("%lld\n", s);
+    }
+    else
+    {
+        while(t < 0)
+        {
+            t += fi;
+        }
+
+        inverso = t;
+        //printf("%lld\n", t);
+    }
+
+    return inverso;
+
+}*/
+
+int inverso(int e, int totiente) 
+{
+    int d;
+	for(d=1; d<=totiente; d++)
+        if((d * e) % totiente == 1)
+            return d;
+}
+
+int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
+{
+    if (e == 0)
+        return 1;
+    else
+    {
+        long long res = fastexp(m, e / 2, n);
+        res = (res * res) % n;
+        if (e % 2 == 1)
+            res = (res * m) % n;
+        return (int)res;
+    }
+}
+
+void convert(char *message, int *messagecon) // Converta a string da mensagem em inteiros de acordo com dicionário proposto
+{
+    int size, i, j;
+    size = strlen(message);
+
+    for (i = 0; i < size - 1; i++)
+    {
+        for (j = 2; j <= 30; j++)
+        {
+            if(toupper(message[i]) == DICIONARIO[j])
+            {
+                messagecon[i] = j;
+                break;
+            }
+        }
+    }
+
+    for(i = 0; i < size - 1; i++)
+    {
+        printf("%d ", messagecon[i]);
+    }
+
+    
+    
+}
+
+void crypt() // Passa a string convertida pada ser criptografada
+{
+    char message[99999];
+    int messagecon[99999];
+    long long int messagecrypt[99999];
+    long long int n, e, size, i;
+
+    printf("Digite a mensagem a ser criptografada:\n");
+
+    buffclear();
+
+    fgets(message, 99999, stdin);
+
+    convert(message, messagecon);
+
+    size = strlen(message);
+
+    printf("Por favor, digite a chave pública para criptografar:\n");
+
+    scanf("%lld %lld", &n, &e);
+
+    for (i = 0; i < size - 1; i++)
+    {
+        messagecrypt[i] = fastexp(messagecon[i], e, n);
+    }
+
+    FILE *out = fopen("msgcriptografada.txt", "w");
+    
+    for (i = 0; i < size - 1; i++)
+    {
+        fprintf(out, "%lld ", messagecrypt[i]);
+    }
+    
+    fclose(out);
+
+    system("clear");
+
+    printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt\n\n");
+}
+
+void keygen() // Função para gerar chave pública
 {
     long long int p = 1, q = 1, e, n, fi;
     int fiprime[10];
@@ -123,177 +349,40 @@ void keygen() //Função para gerar chave pública
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
 
-int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
+void decrypt() // Passa a mensagem criptografada para ser descriptografada
 {
-    if (e == 0)
-        return 1;
-    else
+    int i, j = 0, k, p, q,e;
+    long long int messagec[99999], d, fi;
+     
+     printf("Digite p:\n");
+     scanf("%d", &p);
+     printf("Digite q:\n");
+     scanf("%d", &q);
+     printf("Digite e:\n");
+     scanf("%d", &e);
+
+    fi = (p - 1) * (q - 1);
+    d = inverso(e, fi);
+
+    FILE *in;
+    in = fopen("msgcriptografada.txt", "r");
+    while(!feof(in))
     {
-        long long res = fastexp(m, e / 2, n);
-        res = (res * res) % n;
-        if (e % 2 == 1)
-            res = (res * m) % n;
-        return (int)res;
+        fscanf(in, "%lld", &messagec[j]);
+        j++;
     }
-}
+    fclose(in);
+    
+    FILE *out;
+    out = fopen("mensagem.txt", "w");
 
-void convert(char *message, long long int *messagecon) // Converta a string da mensagem em inteiros de acordo com dicionário proposto
-{
-    int size, i;
-    size = strlen(message);
-
-    for (i = 0; i < size; i++)
-    {
-        if (toupper(message[i]) == 'A')
-        {
-            messagecon[i] = 2;
-        }
-        else if (toupper(message[i]) == 'B')
-        {
-            messagecon[i] = 3;
-        }
-        else if (toupper(message[i]) == 'C')
-        {
-            messagecon[i] = 4;
-        }
-        else if (toupper(message[i]) == 'D')
-        {
-            messagecon[i] = 5;
-        }
-        else if (toupper(message[i]) == 'E')
-        {
-            messagecon[i] = 6;
-        }
-        else if (toupper(message[i]) == 'F')
-        {
-            messagecon[i] = 7;
-        }
-        else if (toupper(message[i]) == 'G')
-        {
-            messagecon[i] = 8;
-        }
-        else if (toupper(message[i]) == 'H')
-        {
-            messagecon[i] = 9;
-        }
-        else if (toupper(message[i]) == 'I')
-        {
-            messagecon[i] = 10;
-        }
-        else if (toupper(message[i]) == 'J')
-        {
-            messagecon[i] = 11;
-        }
-        else if (toupper(message[i]) == 'K')
-        {
-            messagecon[i] = 12;
-        }
-        else if (toupper(message[i]) == 'L')
-        {
-            messagecon[i] = 13;
-        }
-        else if (toupper(message[i]) == 'M')
-        {
-            messagecon[i] = 14;
-        }
-        else if (toupper(message[i]) == 'N')
-        {
-            messagecon[i] = 15;
-        }
-        else if (toupper(message[i]) == 'O')
-        {
-            messagecon[i] = 16;
-        }
-        else if (toupper(message[i]) == 'P')
-        {
-            messagecon[i] = 17;
-        }
-        else if (toupper(message[i]) == 'Q')
-        {
-            messagecon[i] = 18;
-        }
-        else if (toupper(message[i]) == 'R')
-        {
-            messagecon[i] = 19;
-        }
-        else if (toupper(message[i]) == 'S')
-        {
-            messagecon[i] = 20;
-        }
-        else if (toupper(message[i]) == 'T')
-        {
-            messagecon[i] = 21;
-        }
-        else if (toupper(message[i]) == 'U')
-        {
-            messagecon[i] = 22;
-        }
-        else if (toupper(message[i]) == 'V')
-        {
-            messagecon[i] = 23;
-        }
-        else if (toupper(message[i]) == 'W')
-        {
-            messagecon[i] = 24;
-        }
-        else if (toupper(message[i]) == 'X')
-        {
-            messagecon[i] = 25;
-        }
-        else if (toupper(message[i]) == 'Y')
-        {
-            messagecon[i] = 26;
-        }
-        else if (toupper(message[i]) == 'Z')
-        {
-            messagecon[i] = 27;
-        }
-        else if (toupper(message[i]) == ' ')
-        {
-            messagecon[i] = 28;
-        }
-    }
-}
-
-void crypt() // Passa a string convertida pada ser criptografada
-{
-    char message[99999];
-    long long int messagecon[99999], messagecrypt[99999];
-    long long int n, e, size, i;
-
-    printf("Digite a mensagem a ser criptografada:\n");
-
-    buffclear();
-
-    fgets(message, 99999, stdin);
-
-    convert(message, messagecon);
-
-    size = strlen(message);
-
-    printf("Por favor, digite a chave pública para criptografar:\n");
-
-    scanf("%lld %lld", &n, &e);
-
-    for (i = 0; i < size - 1; i++)
-    {
-        messagecrypt[i] = fastexp(messagecon[i], e, n);
-    }
-
-    FILE *out = fopen("msgcriptografada.txt", "w");
-    for (i = 0; i < size - 1; i++)
-    {
-        fprintf(out, "%lld ", messagecrypt[i]);
+    for(i = 0; i < j - 1; i++)
+    {  
+        long long int r = fastexp(messagec[i], d, p*q);
+        fprintf(out, "%c", DICIONARIO[r]);
     }
     fclose(out);
 
-    clear();
-
-    printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt\n\n");
-}
-
-int decrypt() // Passa a mensagem criptografada para ser descriptografada
-{
 }
 
 int main()
