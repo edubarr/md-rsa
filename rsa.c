@@ -281,8 +281,8 @@ int modularinverse(//A ALTERAR//)
     int xt, yt;
     int resto, quo, maiormod, menormod, inverso;
     int s, t;
-    int A[100] =; //array de quocientes
-    int B[100] =; //array de quo invertido
+    int A[100]; //array de quocientes
+    int B[100]; //array de quo invertido
 
 
     scanf("%d%d", &x, &y);
