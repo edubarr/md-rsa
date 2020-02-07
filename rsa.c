@@ -7,13 +7,6 @@
 
 char DICIONARIO[30] = "..ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 
-
-
-// void clear() // Limpa a tela do terminal
-// {
-//     puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-// }
-
 void buffclear(void) // Limpa o buffer de entrada
 {
     int c = 0;
@@ -62,13 +55,12 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
 {
     int i, count = 0;
 
-    for (i = 50; count < 10; i++)
+    for (i = 43; count < 10; i += 13)
     {
         if (mdc(n, i) == 1)
         {
             primes[count] = i;
             count++;
-            i += 17;
         }
     }
 }
@@ -207,11 +199,11 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
 
 }*/
 
-int inverso(int e, int totiente) 
+int inverso(int e, int totiente)
 {
     int d;
-	for(d=1; d<=totiente; d++)
-        if((d * e) % totiente == 1)
+    for (d = 1; d <= totiente; d++)
+        if ((d * e) % totiente == 1)
             return d;
 }
 
@@ -238,24 +230,75 @@ void convert(char *message, int *messagecon) // Converta a string da mensagem em
     {
         for (j = 2; j <= 30; j++)
         {
-            if(toupper(message[i]) == DICIONARIO[j])
+            if (toupper(message[i]) == DICIONARIO[j])
             {
                 messagecon[i] = j;
                 break;
             }
         }
     }
-
-    for(i = 0; i < size - 1; i++)
-    {
-        printf("%d ", messagecon[i]);
-    }
-
-    
-    
 }
 
-void crypt() // Passa a string convertida pada ser criptografada
+void keygen(void) // Função para gerar chave pública
+{
+    long long int p = 1, q = 1, e, n, fi;
+    int fiprime[10];
+    int i;
+
+    while (is_prime(p) == 0 || is_prime(q) == 0 || p * q < 27) //Loop necessário para garantir que os números são primos
+    {
+        printf("Por favor, digite um par de números primos (quanto maior os números, maior a segurança):\n");
+        scanf("%lld%lld", &p, &q);
+        system("clear");
+
+        if (is_prime(p) == 0 && is_prime(q) == 0) //Verifica se p  e q digitado não é primo
+        {
+            printf("Nenhum dos dois números digitados é um primo! Tente novamente.\n");
+        }
+        else if (is_prime(q) == 0) //Verifica se p digitado não é primo
+        {
+            printf("O segundo número digitado não é um primo! Tente novamente.\n");
+        }
+        else if (is_prime(p) == 0) //Verifica se ambos não são primos
+        {
+            printf("O primeiro número digitado não é um primo! Tente novamente.\n");
+        }
+        else if (p * q < 27)
+        {
+            printf("Por favor, digite primos maiores, tal que p * q > 27!\n");
+        }
+    }
+
+    n = p * q; // Calcula n
+
+    fi = (p - 1) * (q - 1); // Calcula a função totiente (fi de Euler)
+
+    suggprime(fi, fiprime); // Chama a função para sugerir coprimos
+
+    printf("Agora, digite um expoente 'e', que seja co-primo a fi. Sugestões:\n");
+
+    for (i = 0; i < 10; i++) //Imprime sugestões de expeonte e
+    {
+        printf("%d", fiprime[i]);
+        if (i != 9)
+        {
+            printf(", ");
+        }
+    }
+
+    printf("\n\n");
+
+    scanf("%lld", &e);
+
+    FILE *pont_pub;                             // Inicia o ponteiro do arquivo da chave pública
+    pont_pub = fopen("chave_publica.txt", "w"); // Abre ou cria o arquivo da chave publica
+    fprintf(pont_pub, "%lld %lld", n, e);       // Grava no arquivo o par de chaves
+    fclose(pont_pub);                           // Fecha o arquivo
+
+    printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
+}
+
+void crypt(void) // Passa a string convertida pada ser criptografada
 {
     char message[99999];
     int messagecon[99999];
@@ -282,12 +325,10 @@ void crypt() // Passa a string convertida pada ser criptografada
     }
 
     FILE *out = fopen("msgcriptografada.txt", "w");
-    
     for (i = 0; i < size - 1; i++)
     {
         fprintf(out, "%lld ", messagecrypt[i]);
     }
-    
     fclose(out);
 
     system("clear");
@@ -295,94 +336,44 @@ void crypt() // Passa a string convertida pada ser criptografada
     printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt\n\n");
 }
 
-void keygen() // Função para gerar chave pública
+void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
 {
-    long long int p = 1, q = 1, e, n, fi;
-    int fiprime[10];
-    int i;
-
-    while (is_prime(p) == 0 || is_prime(q) == 0) //Loop necessário para garantir que os números são primos
-    {
-        printf("Por favor, digite um par de números primos (quanto maior os números, maior a segurança):\n");
-        scanf("%lld%lld", &p, &q);
-
-        if (is_prime(p) == 0 && is_prime(q) == 0) //Verifica se p digitado não é primo
-        {
-            printf("Nenhum dos dois número digitados é um primo! Tente novamente.\n");
-        }
-        else if (is_prime(q) == 0) //Verifica se p digitado não é primo
-        {
-            printf("O segundo número digitado não é um primo! Tente novamente.\n");
-        }
-        else if (is_prime(p) == 0) //Verifica se ambos não são primos
-        {
-            printf("O primeiro número digitado não é um primo! Tente novamente.\n");
-        }
-    }
-
-    n = p * q; // Calcula n
-
-    fi = (p - 1) * (q - 1); // Calcula a função totiente (fi de Euler)
-
-    suggprime(fi, fiprime); // Chama a função para sugerir coprimos
-
-    printf("Agora, digite um expoente e que seja co-primo a fi. Sugestões:\n");
-
-    for (i = 0; i < 10; i++) //Imprime sugestões de expeonte e
-    {
-        printf("%d", fiprime[i]);
-        if (i != 9)
-        {
-            printf(", ");
-        }
-    }
-
-    printf("\n\n");
-
-    scanf("%lld", &e);
-
-    FILE *pont_pub;                             // Inicia o ponteiro do arquivo da chave pública
-    pont_pub = fopen("chave_publica.txt", "w"); // Abre ou cria o arquivo da chave publica
-    fprintf(pont_pub, "%lld %lld", n, e);       // Grava no arquivo o par de chaves
-    fclose(pont_pub);                           // Fecha o arquivo
-
-    printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
-}
-
-void decrypt() // Passa a mensagem criptografada para ser descriptografada
-{
-    int i, j = 0, k, p, q,e;
+    int i, j = 0, k, p, q, e;
     long long int messagec[99999], d, fi;
-     
-     printf("Digite p:\n");
-     scanf("%d", &p);
-     printf("Digite q:\n");
-     scanf("%d", &q);
-     printf("Digite e:\n");
-     scanf("%d", &e);
+
+    printf("Digite p:\n");
+    scanf("%d", &p);
+    printf("Digite q:\n");
+    scanf("%d", &q);
+    printf("Digite e:\n");
+    scanf("%d", &e);
 
     fi = (p - 1) * (q - 1);
+
     d = inverso(e, fi);
 
     FILE *in;
     in = fopen("msgcriptografada.txt", "r");
-    while(!feof(in))
+    while (!feof(in))
     {
         fscanf(in, "%lld", &messagec[j]);
         j++;
     }
     fclose(in);
-    
+
     FILE *out;
     out = fopen("mensagem.txt", "w");
 
-    for(i = 0; i < j - 1; i++)
-    {  
-        long long int r = fastexp(messagec[i], d, p*q);
+    for (i = 0; i < j - 1; i++)
+    {
+        long long int r = fastexp(messagec[i], d, p * q);
         fprintf(out, "%c", DICIONARIO[r]);
     }
     fclose(out);
 
+    system("clear");
+
+    printf("Mensagem descriptografada com sucesso e salva em mensagem.txt\n\n");
 }
 
 int main()
