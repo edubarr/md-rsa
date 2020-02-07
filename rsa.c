@@ -7,13 +7,6 @@
 
 char DICIONARIO[30] = "..ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 
-
-
-// void clear() // Limpa a tela do terminal
-// {
-//     puts("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-// }
-
 void buffclear(void) // Limpa o buffer de entrada
 {
     int c = 0;
