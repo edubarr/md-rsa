@@ -155,19 +155,7 @@ int modularinverse(long long int e, long long int fi)
         s += fi;
     }
 
-    printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, e, t, fi);
-
-    printf("%lld\n", s);
-
     return s;
-}
-
-int inverso(int e, int totiente)
-{
-    int d;
-    for (d = 1; d <= totiente; d++)
-        if ((d * e) % totiente == 1)
-            return d;
 }
 
 int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
@@ -313,7 +301,7 @@ void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
 
     fi = (p - 1) * (q - 1);
 
-    d = inverso(e, fi);
+    d = modularinverse(e, fi);
 
     FILE *in;
     in = fopen("msgcriptografada.txt", "r");
