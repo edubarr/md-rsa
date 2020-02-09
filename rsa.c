@@ -65,7 +65,7 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
     }
 }
 
-int modularinverse(long long int e, long long int fi)
+long long int modularinverse(long long int e, long long int fi)
 {
     long long int e2, fi2; 
     //cópias de "e" e "fi" para que o valor original seja guardado
@@ -158,7 +158,7 @@ int modularinverse(long long int e, long long int fi)
     return s;
 }
 
-int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
+long long int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
 {
     if (e == 0)
         return 1;
