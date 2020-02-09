@@ -16,7 +16,7 @@ void buffclear(void) // Limpa o buffer de entrada
     return;
 }
 
-int is_prime(int n) // Verifica se o número é primo
+int e_primo(int n) // Verifica se o número é primo
 {
     int i;
     if (n == 1 || n == 0)
@@ -38,20 +38,20 @@ int is_prime(int n) // Verifica se o número é primo
 
 int mdc(int n1, int n2) // Calcula o MDC de dois números
 {
-    int remainder;
+    int resto;
     do
     {
-        remainder = n1 % n2;
+        resto = n1 % n2;
 
         n1 = n2;
-        n2 = remainder;
+        n2 = resto;
 
-    } while (remainder != 0);
+    } while (resto != 0);
 
     return n1;
 }
 
-void suggprime(int n, int *primes) // Sugere 10 números coprimos
+void sugprimo(int n, int *primos) // Sugere 10 números coprimos
 {
     int i, count = 0;
 
@@ -59,161 +59,116 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
     {
         if (mdc(n, i) == 1)
         {
-            primes[count] = i;
+            primos[count] = i;
             count++;
         }
     }
 }
 
-/*int modularinverse(long long int fi, long long int e)
+int inversomodular(long long int e, long long int fi)
 {
-    int i, j;
-    long long int fi2, e2;
-    long long int resto, quo, maiormod, menormod, inverso;
-    long long int s, t;
-    long long int quocientes[100]; //array de quocientes
-    long long int quoinvert[100]; //array de quo invertido
+    long long int e2, fi2; 
+    //cópias de "e" e "fi" para que o valor original seja guardado
 
-   // printf("e %lld fi %lld\n", e, fi);
-   
-    for(i = 0; i < 100; i++)
-    {
-        quocientes[i] = -1;
-    }
-
+    long long int aux, i, j, tam = 0, resto, quo, s, t;
+    long long int quocientes[99999]; //array de quocientes
+    long long int quoinvert[99999]; //array de quo invertido
+    
     e2 = e;
     fi2 = fi;
+    
+    resto = e2%fi2;
 
-    if (abs(e) >= abs(fi))
+//------------ preenchendo o array com quocientes
+    for(i = 0; resto!= 0; i++)
     {
-        maiormod = e;
-        menormod = fi;
-    }
-    else
-    {
-        maiormod = fi;
-        menormod = e;
-    }
-
-    resto = e2 % fi2;
-
-    for (i = 0; resto != 0; i++)
-    {
-        quo = e2 / fi2;
+        quo = e2/fi2;
         quocientes[i] = quo;
-        resto = e2 % fi2;
+        tam++; //tamanho da lista
 
-        e2 = fi2; //x é mdc
+        resto = e2%fi2;
+        e2 = fi2; //e2 é mdc
         fi2 = resto;
     }
+   
+//------------ inverter
+    //tam-2 porque o último elemento da lista foi ignorado
 
-    //retirar o ultimo da lista
-
-    for (i = 0; i < 100; i++)
+    for( i = tam-2, j = 0; i >= 0; i--, j++)
     {
-
-        if (quocientes[i] == -1)
-        {
-            quocientes[i - 1] = -1;
-
-            break;
-        }
+        quoinvert[j] = quocientes[i];
     }
 
-    //inverter
+//------------ elementos da nova lista
 
-    j = 0;
+    long long int novalista[tam]; 
+   
+    novalista[0] = 1; 
+    //apesar de não fazer parte da nova lista, 
+    //esse número será utilizado nos cálculos
 
-    for (i = 99; i >= 0; i--)
+    novalista[1] = quoinvert[0]; //novalista[0] * quoinvert[0] = quoinvert[0]
+
+    for(i = 2; i <= tam; i++)
     {
-        if (quocientes[i] != -1)
-        {
-            j++;
-
-            quoinvert[j - 1] = quocientes[i];
-        }
+        novalista[i] = (quoinvert[i-1] * novalista[i-1]) + novalista[i-2];
     }
 
-    //-------------
-
-    //elementos da nova lista
-
-    int C[j + 1];
-
-    C[0] = 1;
-
-    C[1] = quoinvert[0];
-
-    for (i = 2; i <= j; i++)
+    //se tam-1 for ímpar, o último elemento será negativo
+    if( (tam-1) % 2 != 0 )
     {
-        C[i] = (quoinvert[i - 1] * C[i - 1]) + C[i - 2];
+        novalista[tam-1] *= -1;
+    }
+    //se tam-1 for par, o penúltimo elemento será negativo
+    else 
+    {
+        novalista[tam-2] *= -1;
     }
 
-    //---------
-    //se j for ímpar, o último elemento será negativo
-
-    if (j % 2 != 0) //caso em que j é ímpar
+//------------ coeficientes "s" e "t"
+    //para que o valor de s seja o menor em módulo:
+    if( abs(novalista[tam-1]) >= abs(novalista[tam-2]) )
     {
-        C[j] *= -1;
-    }
-    else //se j for par, o penúltimo elemento será negativo
-    {
-        C[j - 1] *= -1;
-    }
-
-    if (abs(C[j]) >= abs(C[j - 1]))
-    {
-        s = C[j];
-        t = C[j - 1];
+        t = novalista[tam-1];
+        s = novalista[tam-2];
     }
     else
     {
-        s = C[j - 1];
-        t = C[j];
+        t = novalista[tam-2];
+        s = novalista[tam-1];
     }
-
-    // printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, menormod, t, maiormod);
-
-    if (menormod == e) //vai printar sempre o "s" convencional e colocá-lo como inverso
+    
+    //caso "e" seja o menor número, há uma troca entre s e t
+    //para que o maior coeficiente o acompanhe, mas permaneça 
+    //sendo intitulado como "s"
+    if(abs(e) < abs(fi))
     {
-        while(s < 0)
-        {
-            s += fi;
-        }
+        aux = s;
+        s = t;
+        t = aux;
 
-        inverso = s;
-        printf("%lld\n", s);
     }
-    else
+
+    //para estar dentro do anel
+    while(s < 0)
     {
-        while(t < 0)
-        {
-            t += fi;
-        }
-
-        inverso = t;
-        //printf("%lld\n", t);
+        s += fi;
     }
 
-    return inverso;
+    printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, e, t, fi);
 
-}*/
+    printf("%lld\n", s);
 
-int inverso(int e, int totiente)
-{
-    int d;
-    for (d = 1; d <= totiente; d++)
-        if ((d * e) % totiente == 1)
-            return d;
+    return s;
 }
 
-int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
+int exp_rapido(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
 {
     if (e == 0)
         return 1;
     else
     {
-        long long res = fastexp(m, e / 2, n);
+        long long res = exp_rapido(m, e / 2, n);
         res = (res * res) % n;
         if (e % 2 == 1)
             res = (res * m) % n;
@@ -221,45 +176,45 @@ int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada el
     }
 }
 
-void convert(char *message, int *messagecon) // Converta a string da mensagem em inteiros de acordo com dicionário proposto
+void convert(char *mensagem, int *mensagemcon) // Converta a string da mensagem em inteiros de acordo com dicionário proposto
 {
-    int size, i, j;
-    size = strlen(message);
+    int tam, i, j;
+    tam = strlen(mensagem);
 
-    for (i = 0; i < size - 1; i++)
+    for (i = 0; i < tam - 1; i++)
     {
         for (j = 2; j <= 30; j++)
         {
-            if (toupper(message[i]) == DICIONARIO[j])
+            if (toupper(mensagem[i]) == DICIONARIO[j])
             {
-                messagecon[i] = j;
+                mensagemcon[i] = j;
                 break;
             }
         }
     }
 }
 
-void keygen(void) // Função para gerar chave pública
+void chavepublica(void) // Função para gerar chave pública
 {
     long long int p = 1, q = 1, e, n, fi;
-    int fiprime[10];
+    int fiprimo[10];
     int i;
 
-    while (is_prime(p) == 0 || is_prime(q) == 0 || p * q < 27) //Loop necessário para garantir que os números são primos
+    while (e_primo(p) == 0 || e_primo(q) == 0 || p * q < 27) //Loop necessário para garantir que os números são primos
     {
         printf("Por favor, digite um par de números primos (quanto maior os números, maior a segurança):\n");
         scanf("%lld%lld", &p, &q);
         system("clear");
 
-        if (is_prime(p) == 0 && is_prime(q) == 0) //Verifica se p  e q digitado não é primo
+        if (e_primo(p) == 0 && e_primo(q) == 0) //Verifica se p  e q digitado não é primo
         {
             printf("Nenhum dos dois números digitados é um primo! Tente novamente.\n");
         }
-        else if (is_prime(q) == 0) //Verifica se p digitado não é primo
+        else if (e_primo(q) == 0) //Verifica se p digitado não é primo
         {
             printf("O segundo número digitado não é um primo! Tente novamente.\n");
         }
-        else if (is_prime(p) == 0) //Verifica se ambos não são primos
+        else if (e_primo(p) == 0) //Verifica se ambos não são primos
         {
             printf("O primeiro número digitado não é um primo! Tente novamente.\n");
         }
@@ -273,13 +228,13 @@ void keygen(void) // Função para gerar chave pública
 
     fi = (p - 1) * (q - 1); // Calcula a função totiente (fi de Euler)
 
-    suggprime(fi, fiprime); // Chama a função para sugerir coprimos
+    sugprimo(fi, fiprimo); // Chama a função para sugerir coprimos
 
-    printf("Agora, digite um expoente 'e', que seja co-primo a fi. Sugestões:\n");
+    printf("Agora, digite um expoente 'e', que seja co-primo a fi (%lld). Sugestões:\n", fi);
 
     for (i = 0; i < 10; i++) //Imprime sugestões de expeonte e
     {
-        printf("%d", fiprime[i]);
+        printf("%d", fiprimo[i]);
         if (i != 9)
         {
             printf(", ");
@@ -298,36 +253,36 @@ void keygen(void) // Função para gerar chave pública
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
 
-void crypt(void) // Passa a string convertida pada ser criptografada
+void cript(void) // Passa a string convertida pada ser criptografada
 {
-    char message[99999];
-    int messagecon[99999];
-    long long int messagecrypt[99999];
-    long long int n, e, size, i;
+    char mensagem[99999];
+    int mensagemcon[99999];
+    long long int mensagemcript[99999];
+    long long int n, e, tam, i;
 
     printf("Digite a mensagem a ser criptografada:\n");
 
     buffclear();
 
-    fgets(message, 99999, stdin);
+    fgets(mensagem, 99999, stdin);
 
-    convert(message, messagecon);
+    convert(mensagem, mensagemcon);
 
-    size = strlen(message);
+    tam = strlen(mensagem);
 
     printf("Por favor, digite a chave pública para criptografar:\n");
 
     scanf("%lld %lld", &n, &e);
 
-    for (i = 0; i < size - 1; i++)
+    for (i = 0; i < tam - 1; i++)
     {
-        messagecrypt[i] = fastexp(messagecon[i], e, n);
+        mensagemcript[i] = exp_rapido(mensagemcon[i], e, n);
     }
 
     FILE *out = fopen("msgcriptografada.txt", "w");
-    for (i = 0; i < size - 1; i++)
+    for (i = 0; i < tam - 1; i++)
     {
-        fprintf(out, "%lld ", messagecrypt[i]);
+        fprintf(out, "%lld ", mensagemcript[i]);
     }
     fclose(out);
 
@@ -336,10 +291,10 @@ void crypt(void) // Passa a string convertida pada ser criptografada
     printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt\n\n");
 }
 
-void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
+void descript(void) // Passa a mensagem criptografada para ser descriptografada
 {
     int i, j = 0, k, p, q, e;
-    long long int messagec[99999], d, fi;
+    long long int mensagemc[99999], d, fi;
 
     printf("Digite p:\n");
     scanf("%d", &p);
@@ -350,13 +305,13 @@ void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
 
     fi = (p - 1) * (q - 1);
 
-    d = inverso(e, fi);
+    d = inversomodular(e, fi);
 
     FILE *in;
     in = fopen("msgcriptografada.txt", "r");
     while (!feof(in))
     {
-        fscanf(in, "%lld", &messagec[j]);
+        fscanf(in, "%lld", &mensagemc[j]);
         j++;
     }
     fclose(in);
@@ -366,7 +321,7 @@ void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
 
     for (i = 0; i < j - 1; i++)
     {
-        long long int r = fastexp(messagec[i], d, p * q);
+        long long int r = exp_rapido(mensagemc[i], d, p * q);
         fprintf(out, "%c", DICIONARIO[r]);
     }
     fclose(out);
@@ -378,26 +333,26 @@ void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
 
 int main()
 {
-    int option;
+    int opcao;
 
     while (RUN)
     {
         printf("Escolha uma opção:\n1 - Gerar chave pública\n2 - Encriptar\n3 - Desencriptar\n0 - Encerrar\n");
-        scanf("%d", &option);
+        scanf("%d", &opcao);
 
-        if (option == 1)
+        if (opcao == 1)
         {
-            keygen();
+            chavepublica();
         }
-        else if (option == 2)
+        else if (opcao == 2)
         {
-            crypt();
+            cript();
         }
-        else if (option == 3)
+        else if (opcao == 3)
         {
-            decrypt();
+            descript();
         }
-        else if (option == 0)
+        else if (opcao == 0)
         {
             break;
         }
