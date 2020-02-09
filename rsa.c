@@ -79,7 +79,7 @@ int modularinverse(long long int e, long long int fi)
     
     remainder = e2%fi2;
 
-//------------ preenchendo o array com quotients
+//------------ preenchendo o array com quocientes
     for(i = 0; remainder!= 0; i++)
     {
         quo = e2/fi2;
