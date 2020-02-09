@@ -155,9 +155,9 @@ long long int inversomodular(long long int e, long long int fi)
         s += fi;
     }
 
-    printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, e, t, fi);
 
-    printf("%lld\n", s);
+
+
 
     return s;
 }
