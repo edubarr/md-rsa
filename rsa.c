@@ -65,7 +65,7 @@ void sugprimo(int n, int *primos) // Sugere 10 números coprimos
     }
 }
 
-int inversomodular(long long int e, long long int fi)
+long long int inversomodular(long long int e, long long int fi)
 {
     long long int e2, fi2; 
     //cópias de "e" e "fi" para que o valor original seja guardado
@@ -162,7 +162,7 @@ int inversomodular(long long int e, long long int fi)
     return s;
 }
 
-int exp_rapido(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
+long long int exp_rapido(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
 {
     if (e == 0)
         return 1;
