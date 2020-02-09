@@ -65,139 +65,102 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
     }
 }
 
-/*int modularinverse(long long int fi, long long int e)
+int modularinverse(long long int e, long long int fi)
 {
-    int i, j;
-    long long int fi2, e2;
-    long long int resto, quo, maiormod, menormod, inverso;
-    long long int s, t;
-    long long int quocientes[100]; //array de quocientes
-    long long int quoinvert[100]; //array de quo invertido
+    long long int e2, fi2; 
+    //cópias de "e" e "fi" para que o valor original seja guardado
 
-   // printf("e %lld fi %lld\n", e, fi);
-   
-    for(i = 0; i < 100; i++)
-    {
-        quocientes[i] = -1;
-    }
-
+    long long int aux, i, j, tam = 0, resto, quo, s, t;
+    long long int quocientes[99999]; //array de quocientes
+    long long int quoinvert[99999]; //array de quo invertido
+    
     e2 = e;
     fi2 = fi;
+    
+    resto = e2%fi2;
 
-    if (abs(e) >= abs(fi))
+//------------ preenchendo o array com quocientes
+    for(i = 0; resto!= 0; i++)
     {
-        maiormod = e;
-        menormod = fi;
-    }
-    else
-    {
-        maiormod = fi;
-        menormod = e;
-    }
-
-    resto = e2 % fi2;
-
-    for (i = 0; resto != 0; i++)
-    {
-        quo = e2 / fi2;
+        quo = e2/fi2;
         quocientes[i] = quo;
-        resto = e2 % fi2;
+        tam++; //tamanho da lista
 
-        e2 = fi2; //x é mdc
+        resto = e2%fi2;
+        e2 = fi2; //e2 é mdc
         fi2 = resto;
     }
+   
+//------------ inverter
+    //tam-2 porque o último elemento da lista foi ignorado
 
-    //retirar o ultimo da lista
-
-    for (i = 0; i < 100; i++)
+    for( i = tam-2, j = 0; i >= 0; i--, j++)
     {
-
-        if (quocientes[i] == -1)
-        {
-            quocientes[i - 1] = -1;
-
-            break;
-        }
+        quoinvert[j] = quocientes[i];
     }
 
-    //inverter
+//------------ elementos da nova lista
 
-    j = 0;
+    long long int novalista[tam]; 
+   
+    novalista[0] = 1; 
+    //apesar de não fazer parte da nova lista, 
+    //esse número será utilizado nos cálculos
 
-    for (i = 99; i >= 0; i--)
+    novalista[1] = quoinvert[0]; //novalista[0] * quoinvert[0] = quoinvert[0]
+
+    for(i = 2; i <= tam; i++)
     {
-        if (quocientes[i] != -1)
-        {
-            j++;
-
-            quoinvert[j - 1] = quocientes[i];
-        }
+        novalista[i] = (quoinvert[i-1] * novalista[i-1]) + novalista[i-2];
     }
 
-    //-------------
-
-    //elementos da nova lista
-
-    int C[j + 1];
-
-    C[0] = 1;
-
-    C[1] = quoinvert[0];
-
-    for (i = 2; i <= j; i++)
+    //se tam-1 for ímpar, o último elemento será negativo
+    if( (tam-1) % 2 != 0 )
     {
-        C[i] = (quoinvert[i - 1] * C[i - 1]) + C[i - 2];
+        novalista[tam-1] *= -1;
+    }
+    //se tam-1 for par, o penúltimo elemento será negativo
+    else 
+    {
+        novalista[tam-2] *= -1;
     }
 
-    //---------
-    //se j for ímpar, o último elemento será negativo
-
-    if (j % 2 != 0) //caso em que j é ímpar
+//------------ coeficientes "s" e "t"
+    //para que o valor de s seja o menor em módulo:
+    if( abs(novalista[tam-1]) >= abs(novalista[tam-2]) )
     {
-        C[j] *= -1;
-    }
-    else //se j for par, o penúltimo elemento será negativo
-    {
-        C[j - 1] *= -1;
-    }
-
-    if (abs(C[j]) >= abs(C[j - 1]))
-    {
-        s = C[j];
-        t = C[j - 1];
+        t = novalista[tam-1];
+        s = novalista[tam-2];
     }
     else
     {
-        s = C[j - 1];
-        t = C[j];
+        t = novalista[tam-2];
+        s = novalista[tam-1];
     }
-
-    // printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, menormod, t, maiormod);
-
-    if (menormod == e) //vai printar sempre o "s" convencional e colocá-lo como inverso
+    
+    //caso "e" seja o menor número, há uma troca entre s e t
+    //para que o maior coeficiente o acompanhe, mas permaneça 
+    //sendo intitulado como "s"
+    if(abs(e) < abs(fi))
     {
-        while(s < 0)
-        {
-            s += fi;
-        }
+        aux = s;
+        s = t;
+        t = aux;
 
-        inverso = s;
-        printf("%lld\n", s);
     }
-    else
+
+    //para estar dentro do anel
+    while(s < 0)
     {
-        while(t < 0)
-        {
-            t += fi;
-        }
-
-        inverso = t;
-        //printf("%lld\n", t);
+        s += fi;
     }
 
-    return inverso;
+    printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, e, t, fi);
 
-}*/
+    printf("%lld\n", s);
+
+    return s;
+}
 
 int inverso(int e, int totiente)
 {
@@ -275,7 +238,7 @@ void keygen(void) // Função para gerar chave pública
 
     suggprime(fi, fiprime); // Chama a função para sugerir coprimos
 
-    printf("Agora, digite um expoente 'e', que seja co-primo a fi. Sugestões:\n");
+    printf("Agora, digite um expoente 'e', que seja co-primo a fi (%lld). Sugestões:\n", fi);
 
     for (i = 0; i < 10; i++) //Imprime sugestões de expeonte e
     {
