@@ -67,97 +67,92 @@ void sugprimo(int n, int *primos) // Sugere 10 números coprimos
 
 long long int inversomodular(long long int e, long long int fi)
 {
-    long long int e2, fi2; 
+    long long int e2, fi2;
     //cópias de "e" e "fi" para que o valor original seja guardado
 
     long long int aux, i, j, tam = 0, resto, quo, s, t;
     long long int quocientes[99999]; //array de quocientes
-    long long int quoinvert[99999]; //array de quo invertido
-    
+    long long int quoinvert[99999];  //array de quo invertido
+
     e2 = e;
     fi2 = fi;
-    
-    resto = e2%fi2;
 
-//------------ preenchendo o array com quocientes
-    for(i = 0; resto!= 0; i++)
+    resto = e2 % fi2;
+
+    //------------ preenchendo o array com quocientes
+    for (i = 0; resto != 0; i++)
     {
-        quo = e2/fi2;
+        quo = e2 / fi2;
         quocientes[i] = quo;
         tam++; //tamanho da lista
 
-        resto = e2%fi2;
+        resto = e2 % fi2;
         e2 = fi2; //e2 é mdc
         fi2 = resto;
     }
-   
-//------------ inverter
+
+    //------------ inverter
     //tam-2 porque o último elemento da lista foi ignorado
 
-    for( i = tam-2, j = 0; i >= 0; i--, j++)
+    for (i = tam - 2, j = 0; i >= 0; i--, j++)
     {
         quoinvert[j] = quocientes[i];
     }
 
-//------------ elementos da nova lista
+    //------------ elementos da nova lista
 
-    long long int novalista[tam]; 
-   
-    novalista[0] = 1; 
-    //apesar de não fazer parte da nova lista, 
+    long long int novalista[tam];
+
+    novalista[0] = 1;
+    //apesar de não fazer parte da nova lista,
     //esse número será utilizado nos cálculos
 
     novalista[1] = quoinvert[0]; //novalista[0] * quoinvert[0] = quoinvert[0]
 
-    for(i = 2; i <= tam; i++)
+    for (i = 2; i <= tam; i++)
     {
-        novalista[i] = (quoinvert[i-1] * novalista[i-1]) + novalista[i-2];
+        novalista[i] = (quoinvert[i - 1] * novalista[i - 1]) + novalista[i - 2];
     }
 
     //se tam-1 for ímpar, o último elemento será negativo
-    if( (tam-1) % 2 != 0 )
+    if ((tam - 1) % 2 != 0)
     {
-        novalista[tam-1] *= -1;
+        novalista[tam - 1] *= -1;
     }
     //se tam-1 for par, o penúltimo elemento será negativo
-    else 
+    else
     {
-        novalista[tam-2] *= -1;
+        novalista[tam - 2] *= -1;
     }
 
-//------------ coeficientes "s" e "t"
+    //------------ coeficientes "s" e "t"
     //para que o valor de s seja o menor em módulo:
-    if( abs(novalista[tam-1]) >= abs(novalista[tam-2]) )
+    if (abs(novalista[tam - 1]) >= abs(novalista[tam - 2]))
     {
-        t = novalista[tam-1];
-        s = novalista[tam-2];
+        t = novalista[tam - 1];
+        s = novalista[tam - 2];
     }
     else
     {
-        t = novalista[tam-2];
-        s = novalista[tam-1];
+        t = novalista[tam - 2];
+        s = novalista[tam - 1];
     }
-    
+
     //caso "e" seja o menor número, há uma troca entre s e t
-    //para que o maior coeficiente o acompanhe, mas permaneça 
+    //para que o maior coeficiente o acompanhe, mas permaneça
     //sendo intitulado como "s"
-    if(abs(e) < abs(fi))
+    if (abs(e) < abs(fi))
     {
         aux = s;
         s = t;
         t = aux;
-
     }
 
     //para estar dentro do anel
-    while(s < 0)
+    while (s < 0)
     {
         s += fi;
     }
-
-
-
-
 
     return s;
 }
@@ -250,6 +245,8 @@ void chavepublica(void) // Função para gerar chave pública
     fprintf(pont_pub, "%lld %lld", n, e);       // Grava no arquivo o par de chaves
     fclose(pont_pub);                           // Fecha o arquivo
 
+    system("clear");
+
     printf("Chave pública gerada com sucesso e salva no arquivo chave_publica.txt!\n\n");
 }
 
@@ -265,6 +262,8 @@ void cript(void) // Passa a string convertida pada ser criptografada
     buffclear();
 
     fgets(mensagem, 99999, stdin);
+
+    system("clear");
 
     convert(mensagem, mensagemcon);
 
@@ -288,7 +287,7 @@ void cript(void) // Passa a string convertida pada ser criptografada
 
     system("clear");
 
-    printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt\n\n");
+    printf("Mensagem criptografada com sucesso e salva em msgcriptografada.txt!\n\n");
 }
 
 void descript(void) // Passa a mensagem criptografada para ser descriptografada
@@ -298,10 +297,13 @@ void descript(void) // Passa a mensagem criptografada para ser descriptografada
 
     printf("Digite p:\n");
     scanf("%d", &p);
+    system("clear");
     printf("Digite q:\n");
     scanf("%d", &q);
+    system("clear");
     printf("Digite e:\n");
     scanf("%d", &e);
+    system("clear");
 
     fi = (p - 1) * (q - 1);
 
@@ -328,7 +330,7 @@ void descript(void) // Passa a mensagem criptografada para ser descriptografada
 
     system("clear");
 
-    printf("Mensagem descriptografada com sucesso e salva em mensagem.txt\n\n");
+    printf("Mensagem descriptografada com sucesso e salva em mensagem.txt!\n\n");
 }
 
 int main()
@@ -342,14 +344,17 @@ int main()
 
         if (opcao == 1)
         {
+            system("clear");
             chavepublica();
         }
         else if (opcao == 2)
         {
+            system("clear");
             cript();
         }
         else if (opcao == 3)
         {
+            system("clear");
             descript();
         }
         else if (opcao == 0)
