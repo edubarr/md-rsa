@@ -5,7 +5,7 @@
 #include <math.h>
 #define RUN 1
 
-char DICIONARIO[30] = "..ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+char DICTIONARY[30] = "..ABCDEFGHIJKLMNOPQRSTUVWXYZ ";
 
 void buffclear(void) // Limpa o buffer de entrada
 {
@@ -65,146 +65,97 @@ void suggprime(int n, int *primes) // Sugere 10 números coprimos
     }
 }
 
-/*int modularinverse(long long int fi, long long int e)
+int modularinverse(long long int e, long long int fi)
 {
-    int i, j;
-    long long int fi2, e2;
-    long long int resto, quo, maiormod, menormod, inverso;
-    long long int s, t;
-    long long int quocientes[100]; //array de quocientes
-    long long int quoinvert[100]; //array de quo invertido
+    long long int e2, fi2; 
+    //cópias de "e" e "fi" para que o valor original seja guardado
 
-   // printf("e %lld fi %lld\n", e, fi);
-   
-    for(i = 0; i < 100; i++)
-    {
-        quocientes[i] = -1;
-    }
-
+    long long int aux, i, j, size = 0, remainder, quo, s, t;
+    long long int quotients[99999]; //array de quocientes
+    long long int quoinvert[99999]; //array de quo invertido
+    
     e2 = e;
     fi2 = fi;
+    
+    remainder = e2%fi2;
 
-    if (abs(e) >= abs(fi))
+//------------ preenchendo o array com quotients
+    for(i = 0; remainder!= 0; i++)
     {
-        maiormod = e;
-        menormod = fi;
+        quo = e2/fi2;
+        quotients[i] = quo;
+        size++; //tamanho da lista
+
+        remainder = e2%fi2;
+        e2 = fi2; //e2 é mdc
+        fi2 = remainder;
+    }
+   
+//------------ inverter
+    //size-2 porque o último elemento da lista foi ignorado
+
+    for( i = size-2, j = 0; i >= 0; i--, j++)
+    {
+        quoinvert[j] = quotients[i];
+    }
+
+//------------ elementos da nova lista
+
+    long long int newlist[size]; 
+   
+    newlist[0] = 1; 
+    //apesar de não fazer parte da nova lista, 
+    //esse número será utilizado nos cálculos
+
+    newlist[1] = quoinvert[0]; //newlist[0] * quoinvert[0] = quoinvert[0]
+
+    for(i = 2; i <= size; i++)
+    {
+        newlist[i] = (quoinvert[i-1] * newlist[i-1]) + newlist[i-2];
+    }
+
+    //se size-1 for ímpar, o último elemento será negativo
+    if( (size-1) % 2 != 0 )
+    {
+        newlist[size-1] *= -1;
+    }
+    //se size-1 for par, o penúltimo elemento será negativo
+    else 
+    {
+        newlist[size-2] *= -1;
+    }
+
+//------------ coeficientes "s" e "t"
+    //para que o valor de s seja o menor em módulo:
+    if( abs(newlist[size-1]) >= abs(newlist[size-2]) )
+    {
+        t = newlist[size-1];
+        s = newlist[size-2];
     }
     else
     {
-        maiormod = fi;
-        menormod = e;
+        t = newlist[size-2];
+        s = newlist[size-1];
     }
-
-    resto = e2 % fi2;
-
-    for (i = 0; resto != 0; i++)
+    
+    //caso "e" seja o menor número, há uma troca entre s e t
+    //para que o maior coeficiente o acompanhe, mas permaneça 
+    //sendo intitulado como "s"
+    if(abs(e) < abs(fi))
     {
-        quo = e2 / fi2;
-        quocientes[i] = quo;
-        resto = e2 % fi2;
+        aux = s;
+        s = t;
+        t = aux;
 
-        e2 = fi2; //x é mdc
-        fi2 = resto;
     }
 
-    //retirar o ultimo da lista
-
-    for (i = 0; i < 100; i++)
+    //para estar dentro do anel
+    while(s < 0)
     {
-
-        if (quocientes[i] == -1)
-        {
-            quocientes[i - 1] = -1;
-
-            break;
-        }
+        s += fi;
     }
 
-    //inverter
-
-    j = 0;
-
-    for (i = 99; i >= 0; i--)
-    {
-        if (quocientes[i] != -1)
-        {
-            j++;
-
-            quoinvert[j - 1] = quocientes[i];
-        }
-    }
-
-    //-------------
-
-    //elementos da nova lista
-
-    int C[j + 1];
-
-    C[0] = 1;
-
-    C[1] = quoinvert[0];
-
-    for (i = 2; i <= j; i++)
-    {
-        C[i] = (quoinvert[i - 1] * C[i - 1]) + C[i - 2];
-    }
-
-    //---------
-    //se j for ímpar, o último elemento será negativo
-
-    if (j % 2 != 0) //caso em que j é ímpar
-    {
-        C[j] *= -1;
-    }
-    else //se j for par, o penúltimo elemento será negativo
-    {
-        C[j - 1] *= -1;
-    }
-
-    if (abs(C[j]) >= abs(C[j - 1]))
-    {
-        s = C[j];
-        t = C[j - 1];
-    }
-    else
-    {
-        s = C[j - 1];
-        t = C[j];
-    }
-
-    // printf("%lld = (%lld) * %lld + (%lld) * %lld\n", e2, s, menormod, t, maiormod);
-
-    if (menormod == e) //vai printar sempre o "s" convencional e colocá-lo como inverso
-    {
-        while(s < 0)
-        {
-            s += fi;
-        }
-
-        inverso = s;
-        printf("%lld\n", s);
-    }
-    else
-    {
-        while(t < 0)
-        {
-            t += fi;
-        }
-
-        inverso = t;
-        //printf("%lld\n", t);
-    }
-
-    return inverso;
-
-}*/
-
-int inverso(int e, int totiente)
-{
-    int d;
-    for (d = 1; d <= totiente; d++)
-        if ((d * e) % totiente == 1)
-            return d;
+    return s;
 }
 
 int fastexp(int m, int e, int n) // Calcula a exponenciação rápida de cada elemento doa array
@@ -230,7 +181,7 @@ void convert(char *message, int *messagecon) // Converta a string da mensagem em
     {
         for (j = 2; j <= 30; j++)
         {
-            if (toupper(message[i]) == DICIONARIO[j])
+            if (toupper(message[i]) == DICTIONARY[j])
             {
                 messagecon[i] = j;
                 break;
@@ -275,7 +226,7 @@ void keygen(void) // Função para gerar chave pública
 
     suggprime(fi, fiprime); // Chama a função para sugerir coprimos
 
-    printf("Agora, digite um expoente 'e', que seja co-primo a fi. Sugestões:\n");
+    printf("Agora, digite um expoente 'e', que seja co-primo a fi (%lld). Sugestões:\n", fi);
 
     for (i = 0; i < 10; i++) //Imprime sugestões de expeonte e
     {
@@ -350,7 +301,7 @@ void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
 
     fi = (p - 1) * (q - 1);
 
-    d = inverso(e, fi);
+    d = modularinverse(e, fi);
 
     FILE *in;
     in = fopen("msgcriptografada.txt", "r");
@@ -367,7 +318,7 @@ void decrypt(void) // Passa a mensagem criptografada para ser descriptografada
     for (i = 0; i < j - 1; i++)
     {
         long long int r = fastexp(messagec[i], d, p * q);
-        fprintf(out, "%c", DICIONARIO[r]);
+        fprintf(out, "%c", DICTIONARY[r]);
     }
     fclose(out);
 
