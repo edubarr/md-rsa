@@ -140,7 +140,7 @@ long long int inversomodular(long long int e, long long int fi)
 
     //caso "e" seja o menor número, há uma troca entre s e t
     //para que o maior coeficiente o acompanhe, mas permaneça
-    //sendo intitulado como "s"
+    //sendo entitulado como "s"
     if (abs(e) < abs(fi))
     {
         aux = s;
